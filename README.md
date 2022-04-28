@@ -1,7 +1,7 @@
 # pyspark_scripts
 
 
-## Primeiro script - enviando dados em paralelo e assíncrono no spark
+## Primeiro script - enviando dados para uma API rest em paralelo e assíncrono no spark
 
 ## Segundo script - criando tables usando delta lake
 
