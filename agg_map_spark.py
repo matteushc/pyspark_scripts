@@ -1,17 +1,17 @@
 import pyspark.sql.functions as F
-from pyspark.sql.functions import col, explode, max, count, when
+from pyspark.sql.functions import col, explode, max as _max, count, when
 from pyspark.sql import Row
 from pyspark.sql.window import Window
 from pyspark.sql.functions import row_number
 
 
 data = [
-    Row(uuid='xp9', app=65, first_app=2809, app_id=2809, total=10),
-    Row(uuid='xp9', app=65, first_app=None, app_id=2767, total=10),
-    Row(uuid='XT8', app=48, first_app=2809 ,app_id=2767, total=6),
-    Row(uuid='XT8', app=48, first_app=None ,app_id=2809, total=4),
-    Row(uuid='wr56', app=48, first_app=None ,app_id=2767, total=20),
-    Row(uuid='wr56', app=48, first_app=None ,app_id=2809, total=20)
+    Row(uuid='xp9', app=65, first_app=2809, app_id=2809, total=10, date="2023-05-10"),
+    Row(uuid='xp9', app=65, first_app=None, app_id=2767, total=10, date="2023-07-15"),
+    Row(uuid='XT8', app=48, first_app=2809 ,app_id=2767, total=6, date="2023-07-20"),
+    Row(uuid='XT8', app=48, first_app=None ,app_id=2809, total=4, date="2023-08-05"),
+    Row(uuid='wr56', app=48, first_app=None ,app_id=2767, total=20, date="2023-08-07"),
+    Row(uuid='wr56', app=48, first_app=None ,app_id=2809, total=20, date="2023-08-22")
 ]
 
 df = spark.createDataFrame(data)
@@ -23,7 +23,7 @@ df2 = df1.groupby("uuid", "app", "first_app")\
          .agg(
              F.map_from_entries(
                  F.collect_list(F.struct("app_id","total"))
-                ).alias("app"))
+                ).alias("app")), _max(col("date")).alias("last_date")
 
 
 spec  = Window.partitionBy("uuid", "app")
