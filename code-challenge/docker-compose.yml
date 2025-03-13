@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: northwind
+      POSTGRES_USER: northwind_user
+      POSTGRES_PASSWORD: thewindisblowing
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+      - ./data/northwind.sql:/docker-entrypoint-initdb.d/northwind.sql
+    ports:
+      - 5432:5432
+  spark:
+    image: bitnami/pyspark
+    environment: 
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    volumes:
+      - ./data:/opt/bitnami/app/data
+      - ./scripts:/opt/bitnami/app/scripts_spark
+    ports:
+      - '8080:8080'
