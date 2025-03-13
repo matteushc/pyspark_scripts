@@ -1,4 +1,4 @@
-# Burger King Code Challenge
+# Code Challenge
 
 O pipeline desenvolvido aqui foi usando ferramentas como Docker, Python e Spark. Não foi usado nenhuma ferramenta de orquestração de pipeline como Airflow ou Nifi devido ao tempo. 
 
