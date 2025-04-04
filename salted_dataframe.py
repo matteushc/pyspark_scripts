@@ -6,7 +6,7 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName("teste").getOrCreate()
 spark.conf.set("spark.sql.autoBroadcastJoinThreshold", -1)
    
-base_candidata_pos = (
+base_pos = (
         spark.read.format('bigquery')
         .option('maxParallelism', 10)
         .option('preferredMinParallelism', 10)
@@ -14,14 +14,14 @@ base_candidata_pos = (
         .option('filter', "partition = 'xpto'").load().select("id", "telefone", "id_plano")
 )
 
-base_candidata_pos.createOrReplaceTempView("base_pos")
+base_pos.createOrReplaceTempView("base_pos")
 
-base_candidata_pos =  spark.sql("""
+base_pos =  spark.sql("""
     select concat(cast(id_plano as integer), '_', FLOOR(RAND(123456) * 19)) as salted_key, id, telefone
     from base_pos
 """)
 
-base_candidata_pos.createOrReplaceTempView("base_skewed")
+base_pos.createOrReplaceTempView("base_skewed")
 
 plano_tarifario = spark.read.format("bigquery") \
     .load("project_id.dataset.table_plano").select("id_plano", "dsc_plano", "nivel_plano")
