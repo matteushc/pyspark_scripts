@@ -8,10 +8,48 @@ cluster_template_details = {
         "Name": "emr-cluster-with-custom-python",
         "ReleaseLabel": "emr-7.8.0",
         "Applications": [
-        {
-            "Name": "Spark"
-        }
-        ],
+		{ "Name": "Hadoop" },
+		{ "Name": "Spark" },
+		{ "Name": "Hive" }
+	],
+	"Configurations": [
+		{
+			"Classification": "spark-defaults",
+			"Properties": {
+				"spark.dynamicAllocation.enable": "true",
+				"spark.dynamicAllocation.minExecutors": "1",
+				"spark.shuffle.service.enabled": "true",
+				"spark.dynamicAllocation.shuffleTracking.enabled": "true",
+				"spark.sql.adaptive.enabled": "true",
+        		        "spark.sql.broadcastTimeout": "600",
+				"spark.shuffle.io.connectionTimeout": "600s",
+				"spark.network.timeout": "600s"
+			}
+		},
+		{
+			"Classification": "spark-hive-site",
+			"Properties": {
+				"hive.metastore.client.factory.class": "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"
+			}
+		},
+		{
+			"Classification" : "spark-env",
+			"Configurations" : [
+				{
+					"Classification" : "export",
+					"Properties" : {
+						"PYSPARK_PYTHON" : "/usr/bin/python3"
+					}
+				}
+			]
+		},
+		{
+			"Classification": "spark",
+			"Properties": {
+				"maximizeResourceAllocation": "true"
+			}
+		}
+	],
         "Instances": {
             "InstanceFleets": [
                 {
