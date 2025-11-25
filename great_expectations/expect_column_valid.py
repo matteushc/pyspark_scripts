@@ -27,9 +27,9 @@ import pyspark.sql.functions as F
 
 
 
-class BatchColumnsUnique(TableMetricProvider):
+class BatchColumnsCalculateBins(TableMetricProvider):
 
-    metric_name = "table.columns.unique"
+    metric_name = "table.columns.bins"
     
     value_keys = ("column", "bins", "column_type", "baseline_pct", "current_pct",)
 
@@ -110,7 +110,7 @@ class BatchColumnsUnique(TableMetricProvider):
             ),
         }
 
-class ExpectBatchColumnsToBeUnique(BatchExpectation):
+class ExpectBatchColumnsValidateBins(BatchExpectation):
     
     column: str = None
     bins: list = None
@@ -120,7 +120,7 @@ class ExpectBatchColumnsToBeUnique(BatchExpectation):
 
     #condition_value_keys = ("column",)
     value_keys = ("column", "bins", "column_type", "baseline_pct", "current_pct",)
-    metric_dependencies = ("table.columns.unique", "table.columns")
+    metric_dependencies = ("table.columns.bins", "table.columns")
 
     #success_keys = ("strict", "column", "bins", "column_type", "baseline_pct", "current_pct",)
     #success_keys = ("strict", "column1", "bins",)
@@ -139,7 +139,7 @@ class ExpectBatchColumnsToBeUnique(BatchExpectation):
         runtime_configuration: dict | None = None,
         execution_engine: ExecutionEngine | None = None,
     ):
-        psi_components = metrics.get("table.columns.unique")
+        psi_components = metrics.get("table.columns.bins")
         #spark_df = execution_engine.dataframe
         dict_list = [row.asDict() for row in psi_components.collect()]
         
