@@ -24,6 +24,3 @@ pyspark --jars /path/teste_delta_lake/libs/delta-core_2.12-0.7.0.jar \
         --conf "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension" \
         --conf "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog" \
         --py-files /path/teste_delta_lake/libs/delta.zip
-
-
-https://github.com/great-expectations/great_expectations/blob/a502fad53a0ba10acb924a664b5a94f058e30c14/docs/docusaurus/versioned_docs/version-0.18/snippets/checkpoints_and_actions.py
